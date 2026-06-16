@@ -1,0 +1,32 @@
+# GitHub Metrics
+# This workflow generates a metrics SVG and commits it to the repository
+name: Metrics Embed
+
+on:
+  schedule: [{cron: "0 0 * * 0"}] # every week
+  workflow_dispatch:
+
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Metrics embed
+        uses: lowlighter/metrics@latest
+        with:
+          filename: metrics.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: "header, activity, community, repositories, metadata"
+          plugin_languages: yes
+          plugin_traffic: yes
+      - name: Commit metrics
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add metrics.svg
+          git commit -m "chore: update metrics [skip ci]" || echo "No changes to commit"
+          git push
+      - name: Upload metrics SVG
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrics-svg
+          path: metrics.svg
