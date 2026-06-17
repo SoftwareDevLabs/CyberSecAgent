@@ -1,0 +1,12 @@
+name: Scheduled Fuzz Test
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Placeholder fuzz run
+        run: echo "Run boofuzz/radamsa orchestrator here"

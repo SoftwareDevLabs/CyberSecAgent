@@ -1,0 +1,14 @@
+name: SBOM Vulnerability Scan
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./integrations/cicd/github-actions/sbom-action
+        with:
+          api-url: ${{ secrets.CYBERGUARD_API_URL }}
+          token: ${{ secrets.CYBERGUARD_API_TOKEN }}

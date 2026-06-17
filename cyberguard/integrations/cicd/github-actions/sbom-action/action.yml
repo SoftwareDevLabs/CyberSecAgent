@@ -1,0 +1,34 @@
+name: CyberGuard SBOM Action
+description: Generate, submit, and scan CycloneDX SBOMs
+inputs:
+  api-url:
+    required: true
+    description: CyberGuard API base URL
+  token:
+    required: true
+    description: API auth token
+  severity-threshold:
+    required: false
+    default: CRITICAL
+runs:
+  using: composite
+  steps:
+    - name: Detect project type
+      shell: bash
+      run: |
+        if [ -f package.json ]; then echo "PROJECT=node" >> $GITHUB_ENV; fi
+        if [ -f pyproject.toml ] || [ -f requirements.txt ]; then echo "PROJECT=python" >> $GITHUB_ENV; fi
+    - name: Generate CycloneDX SBOM
+      shell: bash
+      run: |
+        if [ "$PROJECT" = "node" ]; then npx @cyclonedx/cdxgen -o sbom.cdx.json; else syft . -o cyclonedx-json=sbom.cdx.json; fi
+    - name: Validate and submit SBOM
+      shell: bash
+      env:
+        INPUT_TOKEN: ${{ inputs.token }}
+      run: |
+        test -s sbom.cdx.json
+        curl -fsSL -X POST "${{ inputs.api-url }}/api/v1/sbom/submit" \
+          -H "X-API-Token: $INPUT_TOKEN" \
+          -H "Content-Type: application/json" \
+          --data @sbom.cdx.json

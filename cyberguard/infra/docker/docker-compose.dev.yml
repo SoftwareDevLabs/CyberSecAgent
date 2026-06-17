@@ -1,0 +1,7 @@
+services:
+  api-gateway:
+    environment:
+      ENV: development
+  dashboard:
+    environment:
+      NODE_ENV: development
