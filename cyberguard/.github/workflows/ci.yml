@@ -1,0 +1,13 @@
+name: CyberGuard CI
+on:
+  pull_request:
+  push:
+jobs:
+  sbom-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./integrations/cicd/github-actions/sbom-action
+        with:
+          api-url: ${{ secrets.CYBERGUARD_API_URL }}
+          token: ${{ secrets.CYBERGUARD_API_TOKEN }}
