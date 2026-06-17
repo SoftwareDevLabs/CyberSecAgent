@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from domain_engine import DomainType
 
@@ -13,7 +13,7 @@ except ImportError:  # pragma: no cover
 class RiskScoreRequest(BaseModel):
     sbom_id: str
     domain: DomainType
-    asset_context: dict = {}
+    asset_context: dict = Field(default_factory=dict)
 
 
 if FastAPI:

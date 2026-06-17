@@ -1,6 +1,8 @@
 from pathlib import Path
 import sys
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 for package_dir in [
     ROOT / "packages" / "domain-engine",
@@ -22,7 +24,7 @@ def test_automotive_contextual_risk_score_uses_asil_weight() -> None:
         asil="D",
     )
 
-    assert score == 31.68
+    assert score == pytest.approx(8.0 * 3.0 * 1.2 * 1.1)
 
 
 def test_medical_contextual_risk_score_uses_sil_weight() -> None:
@@ -33,4 +35,4 @@ def test_medical_contextual_risk_score_uses_sil_weight() -> None:
         sil=3,
     )
 
-    assert score == 14.0
+    assert score == pytest.approx(7.0 * 2.0 * 1.0)

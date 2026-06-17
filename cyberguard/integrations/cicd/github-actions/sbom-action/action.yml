@@ -27,8 +27,16 @@ runs:
       env:
         INPUT_TOKEN: ${{ inputs.token }}
       run: |
+        set +x
+        set -euo pipefail
         test -s sbom.cdx.json
-        curl -fsSL -X POST "${{ inputs.api-url }}/api/v1/sbom/submit" \
-          -H "X-API-Token: $INPUT_TOKEN" \
-          -H "Content-Type: application/json" \
-          --data @sbom.cdx.json
+        umask 077
+        cat > /tmp/curl-config.txt <<EOF
+url = "${{ inputs.api-url }}/api/v1/sbom/submit"
+request = POST
+header = "X-API-Token: $INPUT_TOKEN"
+header = "Content-Type: application/json"
+data = @sbom.cdx.json
+EOF
+        curl -fsSL -K /tmp/curl-config.txt
+        rm -f /tmp/curl-config.txt

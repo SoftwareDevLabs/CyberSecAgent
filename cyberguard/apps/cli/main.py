@@ -19,28 +19,28 @@ if typer:
     agent_app = typer.Typer()
 
     @sbom_app.command("generate")
-    def sbom_generate(source: str = ".", output: str = "sbom.cdx.json", format: str = "cyclonedx") -> None:
-        typer.echo(f"generate {format} from {source} -> {output}")
+    def sbom_generate(source: str = ".", output: str = "sbom.cdx.json", output_format: str = "cyclonedx") -> None:
+        typer.echo(f"generate {output_format} from {source} -> {output}")
 
     @sbom_app.command("submit")
     def sbom_submit(file: str, product: str, version: str, domain: str) -> None:
         typer.echo(f"submit {file} for {product}@{version} ({domain})")
 
     @sbom_app.command("scan")
-    def sbom_scan(sbom_id: str, threshold: str = "HIGH", fail_on_critical: bool = False) -> None:
+    def sbom_scan(sbom_id: str, threshold: str = "CRITICAL", fail_on_critical: bool = False) -> None:
         typer.echo(f"scan {sbom_id} threshold={threshold} fail_on_critical={fail_on_critical}")
 
     @sbom_app.command("diff")
-    def sbom_diff(from_id: str = typer.Option(..., "--from"), to: str = typer.Option(..., "--to")) -> None:
-        typer.echo(f"diff {from_id} -> {to}")
+    def sbom_diff(from_id: str = typer.Option(..., "--from"), to_id: str = typer.Option(..., "--to")) -> None:
+        typer.echo(f"diff {from_id} -> {to_id}")
 
     @vuln_app.command("search")
     def vuln_search(cve: str) -> None:
         typer.echo(f"search {cve}")
 
     @vuln_app.command("report")
-    def vuln_report(sbom_id: str, output: str, format: str = "pdf") -> None:
-        typer.echo(f"report for {sbom_id} -> {output} ({format})")
+    def vuln_report(sbom_id: str, output: str, output_format: str = "pdf") -> None:
+        typer.echo(f"report for {sbom_id} -> {output} ({output_format})")
 
     @risk_app.command("score")
     def risk_score(sbom_id: str, domain: str, asil: str | None = None) -> None:
@@ -59,8 +59,8 @@ if typer:
         typer.echo(f"incident severity={severity} sbom={sbom_id}: {description}")
 
     @pentest_app.command("run")
-    def pentest_run(target: str, type: str = "api-scan") -> None:
-        typer.echo(f"pentest {type} on {target}")
+    def pentest_run(target: str, scan_type: str = "api-scan") -> None:
+        typer.echo(f"pentest {scan_type} on {target}")
 
     @fuzz_app.command("run")
     def fuzz_run(target: str, protocol: str, duration: int = 3600) -> None:
