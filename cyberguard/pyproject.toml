@@ -1,0 +1,40 @@
+[project]
+name = "cyberguard"
+version = "0.1.0"
+description = "CyberGuard automotive security platform — CLI and pipeline orchestration"
+requires-python = ">=3.11"
+dependencies = [
+    "cyberguard-pipeline",
+    "cyberguard-agents",
+    "typer[all]>=0.12",
+    "pydantic-settings>=2.0",
+    "rich>=13.0",
+]
+
+[project.scripts]
+cyberguard = "apps.cli.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["apps"]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+cyberguard-pipeline = {workspace = true}
+cyberguard-agents = {workspace = true}
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
