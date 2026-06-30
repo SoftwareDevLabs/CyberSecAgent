@@ -8,7 +8,7 @@ INSTALL_DIR="${TOOLS_INSTALL_DIR:-/usr/local/bin}"
 
 SYFT_VERSION="1.4.1"
 GRYPE_VERSION="0.84.0"
-OSV_SCANNER_VERSION="1.9.2"
+OSV_SCANNER_VERSION="2.4.0"  # v2.x CLI: "osv-scanner scan --sbom <path>" (cve_matcher.py targets this)
 OPENGREP_VERSION="1.7.0"
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
