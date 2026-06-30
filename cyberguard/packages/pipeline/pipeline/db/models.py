@@ -31,7 +31,8 @@ class Base(DeclarativeBase):
 
 
 class Severity(str, enum.Enum):
-    INFO = "INFO"
+    INFO = "INFO"              # severity genuinely unrated/unknown
+    NEGLIGIBLE = "NEGLIGIBLE"  # explicitly rated as zero/near-zero impact (CVSS 0.0)
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
